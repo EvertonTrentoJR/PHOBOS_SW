@@ -1,0 +1,63 @@
+﻿{
+  "AppConfig": {
+    "Port": "COM1",
+    "Setup": "LCR",
+    "Loop": "Enabled",
+    "LoopCount": 1,
+    "Timer": "Disabled",
+    "TimerCount": 60,
+    "path": "C:/Data/Measurements",
+    "filename": "experiment001",
+    "LCRid": "USB0::0x0957::0x0909::MY46204796::0::INSTR",
+    "freqStart": 1000,
+    "freqEnd": 1000000,
+    "freqNpoints": 136,
+    "freqMethod": "LOG",
+    "measMode": "Short",
+    "samples": 1,
+
+    "TableData": [
+      {
+        "ID": 1,
+        "Item": "d:1-2"
+      },
+      {
+        "ID": 2,
+        "Item": "d:2-3"
+      },
+      {
+        "ID": 3,
+        "Item": "d:3-4"
+      },
+      {
+        "ID": 4,
+        "Item": "d:4-5"
+      },
+      {
+        "ID": 5,
+        "Item": "d:5-6"
+      },
+      {
+        "ID": 6,
+        "Item": "d:6-7"
+      },
+      {
+        "ID": 7,
+        "Item": "d:7-8"
+      },
+      {
+        "ID": 8,
+        "Item": "d:8-9"
+      },
+      {
+        "ID": 9,
+        "Item": "d:9-10"
+      },
+      {
+        "ID": 10,
+        "Item": "d:10-1"
+      }
+    ]
+
+  }
+}
