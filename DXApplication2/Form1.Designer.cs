@@ -33,7 +33,10 @@
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.Setup = new DevExpress.XtraEditors.GroupControl();
             this.ChartgroupControl = new DevExpress.XtraEditors.GroupControl();
+            this.checkEditenabelchartfile = new DevExpress.XtraEditors.CheckEdit();
+            this.pathchartbutton = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton_chart = new DevExpress.XtraEditors.SimpleButton();
+            this.chartTestEdit = new DevExpress.XtraEditors.TextEdit();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl19 = new DevExpress.XtraEditors.LabelControl();
             this.plotRadioGroup = new DevExpress.XtraEditors.RadioGroup();
@@ -75,6 +78,21 @@
             this.behaviorManager1 = new DevExpress.Utils.Behaviors.BehaviorManager(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.groupControl5 = new DevExpress.XtraEditors.GroupControl();
+            this.btResetALL = new DevExpress.XtraEditors.SimpleButton();
+            this.btClearSession = new DevExpress.XtraEditors.SimpleButton();
+            this.toggleSwitchCORR = new DevExpress.XtraEditors.ToggleSwitch();
+            this.groupControlCORR = new DevExpress.XtraEditors.GroupControl();
+            this.labelControl27 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl26 = new DevExpress.XtraEditors.LabelControl();
+            this.toggleSwitchShort = new DevExpress.XtraEditors.ToggleSwitch();
+            this.toggleSwitchOpen = new DevExpress.XtraEditors.ToggleSwitch();
+            this.labelControl25 = new DevExpress.XtraEditors.LabelControl();
+            this.btCORRpath = new DevExpress.XtraEditors.SimpleButton();
+            this.textEditCORR = new DevExpress.XtraEditors.TextEdit();
+            this.simpleButtonLOADCORR = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButtonSAVECORR = new DevExpress.XtraEditors.SimpleButton();
+            this.simpleButtonCORR = new DevExpress.XtraEditors.SimpleButton();
+            this.separatorControl1 = new DevExpress.XtraEditors.SeparatorControl();
             this.btLCRpathsave = new DevExpress.XtraEditors.SimpleButton();
             this.labelControl22 = new DevExpress.XtraEditors.LabelControl();
             this.tbFilenameLCR = new DevExpress.XtraEditors.TextEdit();
@@ -106,14 +124,13 @@
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
             this.nudEnd = new DevExpress.XtraEditors.SpinEdit();
             this.nudStart = new DevExpress.XtraEditors.SpinEdit();
-            this.pathchartbutton = new DevExpress.XtraEditors.SimpleButton();
-            this.chartTestEdit = new DevExpress.XtraEditors.TextEdit();
-            this.checkEditenabelchartfile = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Setup)).BeginInit();
             this.Setup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ChartgroupControl)).BeginInit();
             this.ChartgroupControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEditenabelchartfile.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartTestEdit.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.plotRadioGroup.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioGroup_selecttest.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl4)).BeginInit();
@@ -136,6 +153,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl5)).BeginInit();
             this.groupControl5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchCORR.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControlCORR)).BeginInit();
+            this.groupControlCORR.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchShort.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchOpen.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEditCORR.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.separatorControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbFilenameLCR.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbsavepathLCR.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.richTextBox1.Properties)).BeginInit();
@@ -153,8 +177,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudN.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEnd.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStart.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartTestEdit.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEditenabelchartfile.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // dockManager1
@@ -192,7 +214,6 @@
             this.Setup.Size = new System.Drawing.Size(256, 737);
             this.Setup.TabIndex = 0;
             this.Setup.Text = "Setup";
-            this.Setup.Paint += new System.Windows.Forms.PaintEventHandler(this.Setup_Paint);
             // 
             // ChartgroupControl
             // 
@@ -214,6 +235,27 @@
             this.ChartgroupControl.TabIndex = 7;
             this.ChartgroupControl.Text = "Impedance Chart";
             // 
+            // checkEditenabelchartfile
+            // 
+            this.checkEditenabelchartfile.EditValue = true;
+            this.checkEditenabelchartfile.Location = new System.Drawing.Point(0, 128);
+            this.checkEditenabelchartfile.Name = "checkEditenabelchartfile";
+            this.checkEditenabelchartfile.Properties.Caption = "";
+            this.checkEditenabelchartfile.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Far;
+            this.checkEditenabelchartfile.Size = new System.Drawing.Size(20, 19);
+            this.checkEditenabelchartfile.TabIndex = 20;
+            this.checkEditenabelchartfile.CheckedChanged += new System.EventHandler(this.checkEditenabelchartfile_CheckedChanged);
+            // 
+            // pathchartbutton
+            // 
+            this.pathchartbutton.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("pathchartbutton.ImageOptions.SvgImage")));
+            this.pathchartbutton.Location = new System.Drawing.Point(207, 124);
+            this.pathchartbutton.Name = "pathchartbutton";
+            this.pathchartbutton.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
+            this.pathchartbutton.Size = new System.Drawing.Size(34, 23);
+            this.pathchartbutton.TabIndex = 15;
+            this.pathchartbutton.Click += new System.EventHandler(this.pathchartbutton_Click);
+            // 
             // simpleButton_chart
             // 
             this.simpleButton_chart.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
@@ -224,6 +266,13 @@
             this.simpleButton_chart.TabIndex = 15;
             this.simpleButton_chart.Text = "Plot";
             this.simpleButton_chart.Click += new System.EventHandler(this.simpleButton_chart_Click);
+            // 
+            // chartTestEdit
+            // 
+            this.chartTestEdit.Location = new System.Drawing.Point(23, 127);
+            this.chartTestEdit.Name = "chartTestEdit";
+            this.chartTestEdit.Size = new System.Drawing.Size(180, 20);
+            this.chartTestEdit.TabIndex = 14;
             // 
             // labelControl5
             // 
@@ -392,7 +441,6 @@
             0});
             this.loopvalue.Size = new System.Drawing.Size(73, 20);
             this.loopvalue.TabIndex = 16;
-            this.loopvalue.EditValueChanged += new System.EventHandler(this.loopvalue_EditValueChanged);
             // 
             // labelControl13
             // 
@@ -492,7 +540,7 @@
             // 
             // LoadList
             // 
-            this.LoadList.Location = new System.Drawing.Point(575, 386);
+            this.LoadList.Location = new System.Drawing.Point(481, 380);
             this.LoadList.Name = "LoadList";
             this.LoadList.Size = new System.Drawing.Size(54, 23);
             this.LoadList.TabIndex = 12;
@@ -501,7 +549,7 @@
             // 
             // btSavelist
             // 
-            this.btSavelist.Location = new System.Drawing.Point(452, 386);
+            this.btSavelist.Location = new System.Drawing.Point(358, 380);
             this.btSavelist.Name = "btSavelist";
             this.btSavelist.ShowFocusRectangle = DevExpress.Utils.DefaultBoolean.False;
             this.btSavelist.Size = new System.Drawing.Size(54, 23);
@@ -526,10 +574,9 @@
             this.read_write.GroupStyle = DevExpress.Utils.GroupStyle.Light;
             this.read_write.Location = new System.Drawing.Point(263, 2);
             this.read_write.Name = "read_write";
-            this.read_write.Size = new System.Drawing.Size(641, 737);
+            this.read_write.Size = new System.Drawing.Size(549, 737);
             this.read_write.TabIndex = 1;
             this.read_write.Text = "Read/Write";
-            this.read_write.Paint += new System.Windows.Forms.PaintEventHandler(this.read_write_Paint);
             // 
             // erasebutton
             // 
@@ -543,7 +590,7 @@
             // 
             // gridControl1
             // 
-            this.gridControl1.Location = new System.Drawing.Point(452, 96);
+            this.gridControl1.Location = new System.Drawing.Point(358, 90);
             this.gridControl1.MainView = this.gridView1;
             this.gridControl1.Name = "gridControl1";
             this.gridControl1.Size = new System.Drawing.Size(177, 278);
@@ -560,7 +607,7 @@
             // 
             // tbSweeplist
             // 
-            this.tbSweeplist.Location = new System.Drawing.Point(452, 30);
+            this.tbSweeplist.Location = new System.Drawing.Point(358, 24);
             this.tbSweeplist.Name = "tbSweeplist";
             this.tbSweeplist.Size = new System.Drawing.Size(177, 20);
             this.tbSweeplist.TabIndex = 10;
@@ -569,7 +616,7 @@
             // bterase
             // 
             this.bterase.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("bterase.ImageOptions.SvgImage")));
-            this.bterase.Location = new System.Drawing.Point(452, 56);
+            this.bterase.Location = new System.Drawing.Point(358, 50);
             this.bterase.Name = "bterase";
             this.bterase.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
             this.bterase.Size = new System.Drawing.Size(40, 34);
@@ -579,7 +626,7 @@
             // btadd
             // 
             this.btadd.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btadd.ImageOptions.SvgImage")));
-            this.btadd.Location = new System.Drawing.Point(593, 53);
+            this.btadd.Location = new System.Drawing.Point(499, 47);
             this.btadd.Name = "btadd";
             this.btadd.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
             this.btadd.Size = new System.Drawing.Size(36, 34);
@@ -590,7 +637,7 @@
             // 
             this.tbSerialWrite.Location = new System.Drawing.Point(48, 710);
             this.tbSerialWrite.Name = "tbSerialWrite";
-            this.tbSerialWrite.Size = new System.Drawing.Size(324, 20);
+            this.tbSerialWrite.Size = new System.Drawing.Size(231, 20);
             this.tbSerialWrite.TabIndex = 3;
             this.tbSerialWrite.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSerialWrite_KeyDown);
             // 
@@ -598,12 +645,12 @@
             // 
             this.tbReadSerial.Location = new System.Drawing.Point(5, 28);
             this.tbReadSerial.Name = "tbReadSerial";
-            this.tbReadSerial.Size = new System.Drawing.Size(432, 672);
+            this.tbReadSerial.Size = new System.Drawing.Size(339, 672);
             this.tbReadSerial.TabIndex = 2;
             // 
             // Send_serial
             // 
-            this.Send_serial.Location = new System.Drawing.Point(378, 711);
+            this.Send_serial.Location = new System.Drawing.Point(285, 710);
             this.Send_serial.Name = "Send_serial";
             this.Send_serial.Size = new System.Drawing.Size(59, 19);
             this.Send_serial.TabIndex = 1;
@@ -633,6 +680,10 @@
             // 
             this.groupControl5.AppearanceCaption.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
             this.groupControl5.AppearanceCaption.Options.UseFont = true;
+            this.groupControl5.Controls.Add(this.btResetALL);
+            this.groupControl5.Controls.Add(this.btClearSession);
+            this.groupControl5.Controls.Add(this.toggleSwitchCORR);
+            this.groupControl5.Controls.Add(this.groupControlCORR);
             this.groupControl5.Controls.Add(this.btLCRpathsave);
             this.groupControl5.Controls.Add(this.labelControl22);
             this.groupControl5.Controls.Add(this.tbFilenameLCR);
@@ -645,19 +696,190 @@
             this.groupControl5.Controls.Add(this.groupControl7);
             this.groupControl5.Controls.Add(this.groupControl6);
             this.groupControl5.GroupStyle = DevExpress.Utils.GroupStyle.Light;
-            this.groupControl5.Location = new System.Drawing.Point(910, 2);
+            this.groupControl5.Location = new System.Drawing.Point(818, 2);
             this.groupControl5.Name = "groupControl5";
-            this.groupControl5.Size = new System.Drawing.Size(343, 758);
+            this.groupControl5.Size = new System.Drawing.Size(622, 737);
             this.groupControl5.TabIndex = 6;
             this.groupControl5.Text = "E4980A LCR Meter";
+            // 
+            // btResetALL
+            // 
+            this.btResetALL.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.btResetALL.Appearance.Options.UseFont = true;
+            this.btResetALL.ImageOptions.Location = DevExpress.XtraEditors.ImageLocation.MiddleCenter;
+            this.btResetALL.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btResetALL.ImageOptions.SvgImage")));
+            this.btResetALL.Location = new System.Drawing.Point(551, 30);
+            this.btResetALL.Name = "btResetALL";
+            this.btResetALL.Size = new System.Drawing.Size(59, 57);
+            this.btResetALL.TabIndex = 16;
+            this.btResetALL.Click += new System.EventHandler(this.btResetALL_Click);
+            // 
+            // btClearSession
+            // 
+            this.btClearSession.Appearance.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold);
+            this.btClearSession.Appearance.Options.UseFont = true;
+            this.btClearSession.Enabled = false;
+            this.btClearSession.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btClearSession.ImageOptions.Image")));
+            this.btClearSession.Location = new System.Drawing.Point(407, 698);
+            this.btClearSession.Name = "btClearSession";
+            this.btClearSession.Size = new System.Drawing.Size(203, 35);
+            this.btClearSession.TabIndex = 15;
+            this.btClearSession.Text = "Disconnect LCR";
+            this.btClearSession.Click += new System.EventHandler(this.btClearSession_click);
+            // 
+            // toggleSwitchCORR
+            // 
+            this.toggleSwitchCORR.Location = new System.Drawing.Point(540, 307);
+            this.toggleSwitchCORR.Name = "toggleSwitchCORR";
+            this.toggleSwitchCORR.Properties.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.toggleSwitchCORR.Properties.Appearance.Options.UseBackColor = true;
+            this.toggleSwitchCORR.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.toggleSwitchCORR.Properties.OffText = "Off";
+            this.toggleSwitchCORR.Properties.OnText = "On";
+            this.toggleSwitchCORR.Properties.ShowText = false;
+            this.toggleSwitchCORR.Size = new System.Drawing.Size(77, 23);
+            this.toggleSwitchCORR.TabIndex = 32;
+            this.toggleSwitchCORR.Toggled += new System.EventHandler(this.toggleSwitchCORR_Toggled);
+            // 
+            // groupControlCORR
+            // 
+            this.groupControlCORR.AppearanceCaption.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.groupControlCORR.AppearanceCaption.Options.UseFont = true;
+            this.groupControlCORR.Controls.Add(this.labelControl27);
+            this.groupControlCORR.Controls.Add(this.labelControl26);
+            this.groupControlCORR.Controls.Add(this.toggleSwitchShort);
+            this.groupControlCORR.Controls.Add(this.toggleSwitchOpen);
+            this.groupControlCORR.Controls.Add(this.labelControl25);
+            this.groupControlCORR.Controls.Add(this.btCORRpath);
+            this.groupControlCORR.Controls.Add(this.textEditCORR);
+            this.groupControlCORR.Controls.Add(this.simpleButtonLOADCORR);
+            this.groupControlCORR.Controls.Add(this.simpleButtonSAVECORR);
+            this.groupControlCORR.Controls.Add(this.simpleButtonCORR);
+            this.groupControlCORR.Controls.Add(this.separatorControl1);
+            this.groupControlCORR.Enabled = false;
+            this.groupControlCORR.Location = new System.Drawing.Point(5, 317);
+            this.groupControlCORR.Name = "groupControlCORR";
+            this.groupControlCORR.Size = new System.Drawing.Size(605, 151);
+            this.groupControlCORR.TabIndex = 14;
+            this.groupControlCORR.Text = "CORRection";
+            // 
+            // labelControl27
+            // 
+            this.labelControl27.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.labelControl27.Appearance.Options.UseFont = true;
+            this.labelControl27.Location = new System.Drawing.Point(138, 38);
+            this.labelControl27.Name = "labelControl27";
+            this.labelControl27.Size = new System.Drawing.Size(36, 16);
+            this.labelControl27.TabIndex = 31;
+            this.labelControl27.Text = "Short";
+            // 
+            // labelControl26
+            // 
+            this.labelControl26.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.labelControl26.Appearance.Options.UseFont = true;
+            this.labelControl26.Location = new System.Drawing.Point(24, 38);
+            this.labelControl26.Name = "labelControl26";
+            this.labelControl26.Size = new System.Drawing.Size(33, 16);
+            this.labelControl26.TabIndex = 30;
+            this.labelControl26.Text = "Open";
+            // 
+            // toggleSwitchShort
+            // 
+            this.toggleSwitchShort.Location = new System.Drawing.Point(138, 57);
+            this.toggleSwitchShort.Name = "toggleSwitchShort";
+            this.toggleSwitchShort.Properties.OffText = "Off";
+            this.toggleSwitchShort.Properties.OnText = "On";
+            this.toggleSwitchShort.Size = new System.Drawing.Size(95, 23);
+            this.toggleSwitchShort.TabIndex = 29;
+            // 
+            // toggleSwitchOpen
+            // 
+            this.toggleSwitchOpen.Location = new System.Drawing.Point(24, 57);
+            this.toggleSwitchOpen.Name = "toggleSwitchOpen";
+            this.toggleSwitchOpen.Properties.OffText = "Off";
+            this.toggleSwitchOpen.Properties.OnText = "On";
+            this.toggleSwitchOpen.Size = new System.Drawing.Size(95, 23);
+            this.toggleSwitchOpen.TabIndex = 28;
+            // 
+            // labelControl25
+            // 
+            this.labelControl25.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.labelControl25.Appearance.Options.UseFont = true;
+            this.labelControl25.Location = new System.Drawing.Point(290, 93);
+            this.labelControl25.Name = "labelControl25";
+            this.labelControl25.Size = new System.Drawing.Size(65, 16);
+            this.labelControl25.TabIndex = 15;
+            this.labelControl25.Text = "CORRpath";
+            // 
+            // btCORRpath
+            // 
+            this.btCORRpath.Appearance.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btCORRpath.Appearance.Options.UseFont = true;
+            this.btCORRpath.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btCORRpath.ImageOptions.SvgImage")));
+            this.btCORRpath.Location = new System.Drawing.Point(551, 78);
+            this.btCORRpath.Name = "btCORRpath";
+            this.btCORRpath.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
+            this.btCORRpath.Size = new System.Drawing.Size(39, 38);
+            this.btCORRpath.TabIndex = 16;
+            this.btCORRpath.Click += new System.EventHandler(this.btCORRpath_Click);
+            // 
+            // textEditCORR
+            // 
+            this.textEditCORR.EditValue = "";
+            this.textEditCORR.Location = new System.Drawing.Point(290, 120);
+            this.textEditCORR.Name = "textEditCORR";
+            this.textEditCORR.Size = new System.Drawing.Size(304, 20);
+            this.textEditCORR.TabIndex = 15;
+            // 
+            // simpleButtonLOADCORR
+            // 
+            this.simpleButtonLOADCORR.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.simpleButtonLOADCORR.Appearance.Options.UseFont = true;
+            this.simpleButtonLOADCORR.Location = new System.Drawing.Point(449, 36);
+            this.simpleButtonLOADCORR.Name = "simpleButtonLOADCORR";
+            this.simpleButtonLOADCORR.Size = new System.Drawing.Size(145, 38);
+            this.simpleButtonLOADCORR.TabIndex = 23;
+            this.simpleButtonLOADCORR.Text = "LOAD";
+            this.simpleButtonLOADCORR.Click += new System.EventHandler(this.simpleButtonLOADCORR_Click);
+            // 
+            // simpleButtonSAVECORR
+            // 
+            this.simpleButtonSAVECORR.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.simpleButtonSAVECORR.Appearance.Options.UseFont = true;
+            this.simpleButtonSAVECORR.Location = new System.Drawing.Point(292, 37);
+            this.simpleButtonSAVECORR.Name = "simpleButtonSAVECORR";
+            this.simpleButtonSAVECORR.Size = new System.Drawing.Size(145, 38);
+            this.simpleButtonSAVECORR.TabIndex = 22;
+            this.simpleButtonSAVECORR.Text = "SAVE";
+            this.simpleButtonSAVECORR.Click += new System.EventHandler(this.simpleButtonSAVECORR_Click);
+            // 
+            // simpleButtonCORR
+            // 
+            this.simpleButtonCORR.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
+            this.simpleButtonCORR.Appearance.Options.UseFont = true;
+            this.simpleButtonCORR.Location = new System.Drawing.Point(24, 95);
+            this.simpleButtonCORR.Name = "simpleButtonCORR";
+            this.simpleButtonCORR.Size = new System.Drawing.Size(227, 48);
+            this.simpleButtonCORR.TabIndex = 21;
+            this.simpleButtonCORR.Text = "CORRECTION";
+            this.simpleButtonCORR.Click += new System.EventHandler(this.simpleButtonCORR_Click);
+            // 
+            // separatorControl1
+            // 
+            this.separatorControl1.AutoSizeMode = true;
+            this.separatorControl1.LineOrientation = System.Windows.Forms.Orientation.Vertical;
+            this.separatorControl1.Location = new System.Drawing.Point(264, 21);
+            this.separatorControl1.Name = "separatorControl1";
+            this.separatorControl1.Size = new System.Drawing.Size(20, 123);
+            this.separatorControl1.TabIndex = 27;
             // 
             // btLCRpathsave
             // 
             this.btLCRpathsave.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("btLCRpathsave.ImageOptions.SvgImage")));
-            this.btLCRpathsave.Location = new System.Drawing.Point(304, 430);
+            this.btLCRpathsave.Location = new System.Drawing.Point(573, 261);
             this.btLCRpathsave.Name = "btLCRpathsave";
             this.btLCRpathsave.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
-            this.btLCRpathsave.Size = new System.Drawing.Size(34, 23);
+            this.btLCRpathsave.Size = new System.Drawing.Size(33, 32);
             this.btLCRpathsave.TabIndex = 13;
             this.btLCRpathsave.Click += new System.EventHandler(this.btLCRpathsave_Click);
             // 
@@ -665,7 +887,7 @@
             // 
             this.labelControl22.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelControl22.Appearance.Options.UseFont = true;
-            this.labelControl22.Location = new System.Drawing.Point(13, 453);
+            this.labelControl22.Location = new System.Drawing.Point(344, 253);
             this.labelControl22.Name = "labelControl22";
             this.labelControl22.Size = new System.Drawing.Size(55, 16);
             this.labelControl22.TabIndex = 12;
@@ -674,16 +896,16 @@
             // tbFilenameLCR
             // 
             this.tbFilenameLCR.EditValue = "LCR_test_xx";
-            this.tbFilenameLCR.Location = new System.Drawing.Point(5, 465);
+            this.tbFilenameLCR.Location = new System.Drawing.Point(344, 275);
             this.tbFilenameLCR.Name = "tbFilenameLCR";
-            this.tbFilenameLCR.Size = new System.Drawing.Size(328, 20);
+            this.tbFilenameLCR.Size = new System.Drawing.Size(223, 20);
             this.tbFilenameLCR.TabIndex = 11;
             // 
             // labelControl21
             // 
             this.labelControl21.Appearance.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold);
             this.labelControl21.Appearance.Options.UseFont = true;
-            this.labelControl21.Location = new System.Drawing.Point(13, 423);
+            this.labelControl21.Location = new System.Drawing.Point(344, 210);
             this.labelControl21.Name = "labelControl21";
             this.labelControl21.Size = new System.Drawing.Size(30, 16);
             this.labelControl21.TabIndex = 9;
@@ -691,20 +913,20 @@
             // 
             // tbsavepathLCR
             // 
-            this.tbsavepathLCR.Location = new System.Drawing.Point(5, 433);
+            this.tbsavepathLCR.Location = new System.Drawing.Point(344, 228);
             this.tbsavepathLCR.Name = "tbsavepathLCR";
-            this.tbsavepathLCR.Size = new System.Drawing.Size(293, 20);
+            this.tbsavepathLCR.Size = new System.Drawing.Size(266, 20);
             this.tbsavepathLCR.TabIndex = 8;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 488);
+            this.label2.Location = new System.Drawing.Point(516, 481);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(69, 16);
+            this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 6;
-            this.label2.Text = "IA Status";
+            this.label2.Text = "LCR Term";
             // 
             // btnStart
             // 
@@ -712,18 +934,18 @@
             this.btnStart.Appearance.Options.UseFont = true;
             this.btnStart.Enabled = false;
             this.btnStart.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("btnStart.ImageOptions.Image")));
-            this.btnStart.Location = new System.Drawing.Point(4, 718);
+            this.btnStart.Location = new System.Drawing.Point(5, 699);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(333, 35);
+            this.btnStart.Size = new System.Drawing.Size(203, 35);
             this.btnStart.TabIndex = 4;
             this.btnStart.Text = "Connect LCR";
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(5, 499);
+            this.richTextBox1.Location = new System.Drawing.Point(5, 475);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(333, 213);
+            this.richTextBox1.Size = new System.Drawing.Size(605, 220);
             this.richTextBox1.TabIndex = 3;
             // 
             // groupControl8
@@ -731,16 +953,16 @@
             this.groupControl8.Controls.Add(this.tbDevice);
             this.groupControl8.Location = new System.Drawing.Point(5, 30);
             this.groupControl8.Name = "groupControl8";
-            this.groupControl8.Size = new System.Drawing.Size(333, 57);
+            this.groupControl8.Size = new System.Drawing.Size(403, 57);
             this.groupControl8.TabIndex = 2;
             this.groupControl8.Text = "DeviceID";
             // 
             // tbDevice
             // 
             this.tbDevice.EditValue = "Check Keysight Connection Expert for LCR E4980A VISA Address";
-            this.tbDevice.Location = new System.Drawing.Point(5, 20);
+            this.tbDevice.Location = new System.Drawing.Point(5, 24);
             this.tbDevice.Name = "tbDevice";
-            this.tbDevice.Size = new System.Drawing.Size(323, 20);
+            this.tbDevice.Size = new System.Drawing.Size(389, 20);
             this.tbDevice.TabIndex = 0;
             // 
             // groupControl7
@@ -753,15 +975,15 @@
             this.groupControl7.Controls.Add(this.nudSamples);
             this.groupControl7.Controls.Add(this.labelControl12);
             this.groupControl7.Controls.Add(this.radioGroup4);
-            this.groupControl7.Location = new System.Drawing.Point(5, 303);
+            this.groupControl7.Location = new System.Drawing.Point(344, 91);
             this.groupControl7.Name = "groupControl7";
-            this.groupControl7.Size = new System.Drawing.Size(333, 114);
+            this.groupControl7.Size = new System.Drawing.Size(266, 114);
             this.groupControl7.TabIndex = 1;
             this.groupControl7.Text = "Sampling Time";
             // 
             // labelControl20
             // 
-            this.labelControl20.Location = new System.Drawing.Point(243, 58);
+            this.labelControl20.Location = new System.Drawing.Point(193, 58);
             this.labelControl20.Name = "labelControl20";
             this.labelControl20.Size = new System.Drawing.Size(30, 13);
             this.labelControl20.TabIndex = 16;
@@ -769,7 +991,7 @@
             // 
             // labelControl18
             // 
-            this.labelControl18.Location = new System.Drawing.Point(150, 58);
+            this.labelControl18.Location = new System.Drawing.Point(112, 58);
             this.labelControl18.Name = "labelControl18";
             this.labelControl18.Size = new System.Drawing.Size(40, 13);
             this.labelControl18.TabIndex = 15;
@@ -777,7 +999,7 @@
             // 
             // labelControl17
             // 
-            this.labelControl17.Location = new System.Drawing.Point(59, 58);
+            this.labelControl17.Location = new System.Drawing.Point(49, 58);
             this.labelControl17.Name = "labelControl17";
             this.labelControl17.Size = new System.Drawing.Size(31, 13);
             this.labelControl17.TabIndex = 14;
@@ -790,16 +1012,16 @@
             0,
             0,
             0});
-            this.nudSamples.Location = new System.Drawing.Point(209, 86);
+            this.nudSamples.Location = new System.Drawing.Point(192, 86);
             this.nudSamples.Name = "nudSamples";
             this.nudSamples.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.nudSamples.Size = new System.Drawing.Size(100, 20);
+            this.nudSamples.Size = new System.Drawing.Size(57, 20);
             this.nudSamples.TabIndex = 3;
             // 
             // labelControl12
             // 
-            this.labelControl12.Location = new System.Drawing.Point(149, 89);
+            this.labelControl12.Location = new System.Drawing.Point(118, 89);
             this.labelControl12.Name = "labelControl12";
             this.labelControl12.Size = new System.Drawing.Size(55, 13);
             this.labelControl12.TabIndex = 2;
@@ -815,7 +1037,7 @@
             new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Short", true, null, "rbshort"),
             new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Medium", true, null, "rbMedium"),
             new DevExpress.XtraEditors.Controls.RadioGroupItem(null, "Long", true, null, "rbLong")});
-            this.radioGroup4.Size = new System.Drawing.Size(285, 34);
+            this.radioGroup4.Size = new System.Drawing.Size(225, 34);
             this.radioGroup4.TabIndex = 1;
             // 
             // groupControl6
@@ -913,6 +1135,11 @@
             this.nudN.Name = "nudN";
             this.nudN.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.nudN.Properties.MaxValue = new decimal(new int[] {
+            201,
+            0,
+            0,
+            0});
             this.nudN.Size = new System.Drawing.Size(80, 20);
             this.nudN.TabIndex = 5;
             this.nudN.EditValueChanged += new System.EventHandler(this.nudStart_ValueChanged);
@@ -990,39 +1217,11 @@
             this.nudStart.TabIndex = 0;
             this.nudStart.ValueChanged += new System.EventHandler(this.nudStart_ValueChanged);
             // 
-            // pathchartbutton
-            // 
-            this.pathchartbutton.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("simpleButton1.ImageOptions.SvgImage")));
-            this.pathchartbutton.Location = new System.Drawing.Point(207, 124);
-            this.pathchartbutton.Name = "pathchartbutton";
-            this.pathchartbutton.PaintStyle = DevExpress.XtraEditors.Controls.PaintStyles.Light;
-            this.pathchartbutton.Size = new System.Drawing.Size(34, 23);
-            this.pathchartbutton.TabIndex = 15;
-            this.pathchartbutton.Click += new System.EventHandler(this.pathchartbutton_Click);
-            // 
-            // chartTestEdit
-            // 
-            this.chartTestEdit.Location = new System.Drawing.Point(23, 127);
-            this.chartTestEdit.Name = "chartTestEdit";
-            this.chartTestEdit.Size = new System.Drawing.Size(180, 20);
-            this.chartTestEdit.TabIndex = 14;
-            // 
-            // checkEditenabelchartfile
-            // 
-            this.checkEditenabelchartfile.EditValue = true;
-            this.checkEditenabelchartfile.Location = new System.Drawing.Point(0, 128);
-            this.checkEditenabelchartfile.Name = "checkEditenabelchartfile";
-            this.checkEditenabelchartfile.Properties.Caption = "";
-            this.checkEditenabelchartfile.Properties.GlyphAlignment = DevExpress.Utils.HorzAlignment.Far;
-            this.checkEditenabelchartfile.Size = new System.Drawing.Size(20, 19);
-            this.checkEditenabelchartfile.TabIndex = 20;
-            this.checkEditenabelchartfile.CheckedChanged += new System.EventHandler(this.checkEditenabelchartfile_CheckedChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1258, 778);
+            this.ClientSize = new System.Drawing.Size(1445, 767);
             this.Controls.Add(this.groupControl5);
             this.Controls.Add(this.tbStatus);
             this.Controls.Add(this.read_write);
@@ -1043,6 +1242,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ChartgroupControl)).EndInit();
             this.ChartgroupControl.ResumeLayout(false);
             this.ChartgroupControl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEditenabelchartfile.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartTestEdit.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.plotRadioGroup.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radioGroup_selecttest.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl4)).EndInit();
@@ -1068,6 +1269,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.groupControl5)).EndInit();
             this.groupControl5.ResumeLayout(false);
             this.groupControl5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchCORR.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.groupControlCORR)).EndInit();
+            this.groupControlCORR.ResumeLayout(false);
+            this.groupControlCORR.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchShort.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.toggleSwitchOpen.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textEditCORR.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.separatorControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbFilenameLCR.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbsavepathLCR.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.richTextBox1.Properties)).EndInit();
@@ -1087,8 +1296,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudN.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEnd.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStart.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chartTestEdit.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.checkEditenabelchartfile.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1176,6 +1383,21 @@
         private DevExpress.XtraEditors.SimpleButton pathchartbutton;
         private DevExpress.XtraEditors.TextEdit chartTestEdit;
         private DevExpress.XtraEditors.CheckEdit checkEditenabelchartfile;
+        private DevExpress.XtraEditors.GroupControl groupControlCORR;
+        private DevExpress.XtraEditors.SimpleButton simpleButtonLOADCORR;
+        private DevExpress.XtraEditors.SimpleButton simpleButtonSAVECORR;
+        private DevExpress.XtraEditors.SimpleButton simpleButtonCORR;
+        private DevExpress.XtraEditors.SimpleButton btCORRpath;
+        private DevExpress.XtraEditors.TextEdit textEditCORR;
+        private DevExpress.XtraEditors.SeparatorControl separatorControl1;
+        private DevExpress.XtraEditors.LabelControl labelControl25;
+        private DevExpress.XtraEditors.LabelControl labelControl27;
+        private DevExpress.XtraEditors.LabelControl labelControl26;
+        private DevExpress.XtraEditors.ToggleSwitch toggleSwitchShort;
+        private DevExpress.XtraEditors.ToggleSwitch toggleSwitchOpen;
+        private DevExpress.XtraEditors.SimpleButton btClearSession;
+        private DevExpress.XtraEditors.SimpleButton btResetALL;
+        private DevExpress.XtraEditors.ToggleSwitch toggleSwitchCORR;
     }
 }
 

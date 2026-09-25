@@ -15,6 +15,7 @@ using DevExpress.XtraGrid.Views.Grid;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Configuration;
 using DevExpress.CodeParser;
+using DevExpress.XtraEditors;
 
 namespace DXApplication2
 {
@@ -53,14 +54,8 @@ namespace DXApplication2
             backgroundWorker1.WorkerReportsProgress = true;
             backgroundWorker1.WorkerSupportsCancellation = true;
 
-
-            // LCR init
-            //InitializeSavedValues();
-
             // GRIDVIEW
             rowCount = (gridControl1.FocusedView as GridView).RowCount;
-
-            //radioGroup_selecttest.SelectedIndex = 1;
 
         }
         private void LoadConfig()
@@ -155,7 +150,7 @@ namespace DXApplication2
             nudN.Value = cfg.freqNpoints;
 
             radioGroup3.SelectedIndex = (cfg.freqMethod == "LOG") ? 0 : 2;
-
+            updateSetuprb();
             updateAutoFreqList();
 
             // Sampling Mode
@@ -253,8 +248,6 @@ namespace DXApplication2
                 }
             }
         }
-
-
 
         int datacount = 0;
 
@@ -642,59 +635,88 @@ namespace DXApplication2
                 session.FormattedIO.WriteLine("*IDN?");
                 string idName = session.FormattedIO.ReadLine();
 
+                if (!CORR) {
+                    /// E4980A VISA Commands
+                    /// https://www.cmc.ca/wp-content/uploads/2019/07/E4980A-User-Guide.pdf
+          
+                    session.FormattedIO.WriteLine("RST;*CLS");
+                    session.FormattedIO.WriteLine("TRIG:SOUR BUS");
+                    session.FormattedIO.WriteLine("DISP:PAGE LIST");
 
-                /// E4980A VISA Commands
-                /// https://www.cmc.ca/wp-content/uploads/2019/07/E4980A-User-Guide.pdf
-
-                session.FormattedIO.WriteLine("RST;*CLS");
-                session.FormattedIO.WriteLine("TRIG:SOUR BUS");
-                session.FormattedIO.WriteLine("DISP:PAGE LIST");
-
-                /// Sampling time
-                if (radioGroup4.SelectedIndex == 2)
-                    session.FormattedIO.WriteLine("APER LONG,1");
-                else if (radioGroup4.SelectedIndex == 1)
-                    session.FormattedIO.WriteLine("APER MED,1");
-                else
-                    session.FormattedIO.WriteLine("APER SHORT,1");
-
-
-                session.FormattedIO.WriteLine("LIST:CLE:ALL");
-
-                /// Data format
-                session.FormattedIO.WriteLine("FUNC:IMP CPRP");
-                session.FormattedIO.WriteLine("FORM ASC");
+                    /// Sampling time
+                    if (radioGroup4.SelectedIndex == 2)
+                        session.FormattedIO.WriteLine("APER LONG,1");
+                    else if (radioGroup4.SelectedIndex == 1)
+                        session.FormattedIO.WriteLine("APER MED,1");
+                    else
+                        session.FormattedIO.WriteLine("APER SHORT,1");
 
 
-                /// Frequency sweep list
-                session.FormattedIO.WriteLine("LIST:MODE SEQ");
+                    session.FormattedIO.WriteLine("LIST:CLE:ALL");
 
-                string frequencyList = tbFlist.Text;
+                    /// Data format
+                    session.FormattedIO.WriteLine("FUNC:IMP CPRP");
+                    session.FormattedIO.WriteLine("FORM ASC");
 
-                frq = frequencyList.Split(',');
-                header = "timestamp, mode, ";
-                //if (cbCalib.Checked)
-                //    header = header + "R, C, ";
 
-                for (int i = 0; i < frq.Count(); i++)
-                {
-                    header += frq[i].Trim() + " Cp, ";
-                    header += frq[i].Trim() + " Rp, ";
+                    /// Frequency sweep list
+                    session.FormattedIO.WriteLine("LIST:MODE SEQ");
+
+                    string frequencyList = tbFlist.Text;
+
+                    frq = frequencyList.Split(',');
+                    header = "timestamp, mode, ";
+
+
+                    for (int i = 0; i < frq.Count(); i++)
+                    {
+                        header += frq[i].Trim() + " Cp, ";
+                        header += frq[i].Trim() + " Rp, ";
+                    }
+                    header = header.TrimEnd();
+                    header = header.TrimEnd(',');
+
+                    Thread.Sleep(200);
+
+                    session.FormattedIO.WriteLine("LIST:FREQ " + frequencyList);
+                    session.FormattedIO.WriteLine("INIT:CONT ON");
                 }
-                header = header.TrimEnd();
-                header = header.TrimEnd(',');
-
-                Thread.Sleep(200);
-
-                session.FormattedIO.WriteLine("LIST:FREQ " + frequencyList);
-                session.FormattedIO.WriteLine("INIT:CONT ON");
-                //session.FormattedIO.WriteLine("TRIG:IMM");
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message, "LCR meter", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+        private void CloseLCRSession()
+        {
+            if (session != null)
+            {
+                session.FormattedIO.WriteLine("*RST");
+            }
+            lcrConnected = false;
+        }
+
+        private void checkLOADCORRLCR()
+        {
+            session.FormattedIO.WriteLine("*OPC?");
+            string opc = session.FormattedIO.ReadLine().Trim();
+
+            if (opc != "1")
+            {
+                throw new Exception("E4980A did not complete the correction data upload.");
+            }
+
+            session.FormattedIO.WriteLine(":SYSTem:ERRor?");
+            string error = session.FormattedIO.ReadLine().Trim();
+
+            if (!error.StartsWith("+0") && !error.StartsWith("0"))
+            {
+                throw new Exception(
+                    "E4980A rejected the correction data:\n\n" + error
+                );
+            }
+        }
+
         private void btapplylist_Click(object sender, EventArgs e)
         {
             if (applybutton != true)
@@ -747,6 +769,8 @@ namespace DXApplication2
         }
 
         // LCR METER
+
+        bool lcrConnected = false;
         private void nudStart_ValueChanged(object sender, EventArgs e)
         {
             updateAutoFreqList();
@@ -755,8 +779,6 @@ namespace DXApplication2
         {
             updateAutoFreqList();
         }
-
-        bool lcrConnected = false;
         private void btnStart_Click(object sender, EventArgs e)
         {
 
@@ -780,6 +802,10 @@ namespace DXApplication2
                     Thread t_lcr = new Thread(LCRThread);
                     t_lcr.Start();
                 }
+
+                btClearSession.Enabled = true;
+                groupControlCORR.Enabled = false;
+                btResetALL.Enabled = false;
             }
             else
             {
@@ -796,10 +822,6 @@ namespace DXApplication2
         {
             var list = Enumerable.Range((int)start, count).Select(v => (double)v);
             return list.Select(n => Math.Round(n, 3, MidpointRounding.AwayFromZero));
-        }
-        public static IEnumerable<double> Power(IEnumerable<double> exponents, double baseValue = 10.0d)
-        {
-            return exponents.Select(v => Math.Pow(baseValue, v));
         }
         public static IEnumerable<double> linspace(double start, double stop, int num, bool endpoint = true)
         {
@@ -834,7 +856,6 @@ namespace DXApplication2
             else if (radioGroup3.SelectedIndex == 1)
                 tbFlist.Text = string.Join(", ", linspace(Convert.ToDouble(nudStart.Value), Convert.ToDouble(nudEnd.Value), Convert.ToInt16(nudN.Value)));
         }
-
         void LCRThread()
         {
             try
@@ -907,7 +928,6 @@ namespace DXApplication2
                         {
                             richTextBox1.Text += DateTime.Now.ToString() + " - Measurement number " + i.ToString() + "\r\n" + time + "\r\n" + unixTime.ToString() + ", " + s + "\r\n";
 
-
                         }));
                         Console.WriteLine(time);
                     }
@@ -915,22 +935,29 @@ namespace DXApplication2
                 }
 
                 BeginInvoke(new Action(() =>
-               {
-                   sweeptimer.Stop();
-                   btnStart.Enabled = true;
-                   richTextBox1.Text += "Measurement finished!\r\n";
-                   sweepelapsedtime = sweeptimer.Elapsed.TotalMilliseconds;
-                   tbReadSerial.Text += $"Time elapsed (ms): {sweeptimer.Elapsed.TotalMilliseconds} \r\n";
-                   if (loopSweep.Checked && loopcount == (loopvalue.Value * rowCount))
-                   {
-                       chartTestEdit.Text = tbsavepathLCR.Text + "\\" + tbFilenameLCR.Text + ".csv";
-                       simpleButton_chart_Click(this, new EventArgs());
-                      
-                       MessageBox.Show("LoopMode Done successfully", "SerialWrite Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                       loopcount = 0;
-                   }
-                   else { writeAction(); }
-               }));
+                {
+                    sweeptimer.Stop();
+                    btnStart.Enabled = true;
+                    richTextBox1.Text += "Measurement finished!\r\n";
+                    sweepelapsedtime = sweeptimer.Elapsed.TotalMilliseconds;
+                    tbReadSerial.Text += $"Time elapsed (ms): {sweeptimer.Elapsed.TotalMilliseconds} \r\n";
+
+                    if (radioGroup_selecttest.SelectedIndex == 0)
+                    {
+                        chartTestEdit.Text = tbsavepathLCR.Text + "\\" + tbFilenameLCR.Text + ".csv";
+                        simpleButton_chart_Click(this, new EventArgs());
+                    }
+
+                    if (loopSweep.Checked && loopcount == (loopvalue.Value * rowCount))
+                    {
+                        chartTestEdit.Text = tbsavepathLCR.Text + "\\" + tbFilenameLCR.Text + ".csv";
+                        simpleButton_chart_Click(this, new EventArgs());
+
+                        MessageBox.Show("LoopMode Done successfully", "SerialWrite Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        loopcount = 0;
+                    }
+                    else { writeAction(); }
+                }));
 
             }
             catch (Exception ex)
@@ -943,7 +970,6 @@ namespace DXApplication2
                 }));
             }
         }
-
         private void btLCRpathsave_Click(object sender, EventArgs e)
         {
             using (var dialog = new FolderBrowserDialog()) // ou VistaFolderBrowserDialog se usar Ookii
@@ -960,7 +986,6 @@ namespace DXApplication2
 
         //timer 
         Thread timedAcquisition;
-
         void acqThread()
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -982,7 +1007,6 @@ namespace DXApplication2
                 btapplylist_Click(this, new EventArgs());
             }));
         }
-
         private void loopSweep_CheckedChanged(object sender, EventArgs e)
         {
             // Temporarily unsubscribe from the other checkbox's event
@@ -996,7 +1020,6 @@ namespace DXApplication2
             // Re-subscribe to the other checkbox's event
             Cetimer.CheckedChanged += Cetimer_CheckedChanged;
         }
-
         private void Cetimer_CheckedChanged(object sender, EventArgs e)
         {
             // Temporarily unsubscribe from the other checkbox's event
@@ -1010,23 +1033,12 @@ namespace DXApplication2
             // Re-subscribe to the other checkbox's event
             loopSweep.CheckedChanged += loopSweep_CheckedChanged;
         }
-
-        private void read_write_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void loopvalue_EditValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Setup_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void radioGroup_selecttest_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            updateSetuprb();
+        }
+
+        private void updateSetuprb()
         {
             if (radioGroup_selecttest.SelectedIndex == 0)
             {
@@ -1058,7 +1070,6 @@ namespace DXApplication2
 
             }
         }
-
 
         // CpRp / Nyquist Chart
 
@@ -1128,27 +1139,8 @@ namespace DXApplication2
                 }
                 else
                 {
-                    //chartTestEdit.Text = tbsavepathLCR.Text + "\\" + tbFilenameLCR.Text + ".csv";
-
-                    //switch (plotRadioGroup.SelectedIndex)
-                    //{
-                    //    case 0:
-
-                    //        if (!CpRpToNyquist(frequencies, cpValues, rpValues, out zLine, out z2Line))
-                    //        {
-                    //            return;
-                    //        }
-
-                    //        nyquistChartWindow.ChartConfigNyquist(zLine, z2Line);
-                    //        break;
-
-                    //    case 1:
-
-                    //        nyquistChartWindow.ChartConfigCpRp(frequencies, cpValues, rpValues);
-                    //        break;
-                    //        }
-                return;
-            }
+                    return;
+                }
             }
 
             if (!nyquistChartWindow.Visible)
@@ -1184,7 +1176,7 @@ namespace DXApplication2
             // Validate the selected file.
             if (string.IsNullOrWhiteSpace(filePath))
             {
-                DevExpress.XtraEditors.XtraMessageBox.Show(
+                XtraMessageBox.Show(
                     "Please select a CSV file.",
                     "No File Selected",
                     MessageBoxButtons.OK,
@@ -1195,7 +1187,7 @@ namespace DXApplication2
 
             if (!File.Exists(filePath))
             {
-                DevExpress.XtraEditors.XtraMessageBox.Show(
+                XtraMessageBox.Show(
                     "The selected file could not be found.",
                     "File Not Found",
                     MessageBoxButtons.OK,
@@ -1206,7 +1198,7 @@ namespace DXApplication2
 
             if (!string.Equals(Path.GetExtension(filePath), ".csv", StringComparison.OrdinalIgnoreCase))
             {
-                DevExpress.XtraEditors.XtraMessageBox.Show(
+                XtraMessageBox.Show(
                     "The selected file is not a CSV file.",
                     "Invalid File",
                     MessageBoxButtons.OK,
@@ -1436,7 +1428,7 @@ namespace DXApplication2
              
             catch (Exception ex)
             {
-                DevExpress.XtraEditors.XtraMessageBox.Show(
+                XtraMessageBox.Show(
                     "An error occurred while reading the CSV file:\n\n" +
                     ex.Message,
                     "CSV Reading Error",
@@ -1663,6 +1655,417 @@ namespace DXApplication2
             }
 
             return zRealMulti.Count > 0;
+        }
+
+        // CORRECTION Feature
+        bool CORR = false;
+        bool CORRopen =false;
+        bool CORRshort = false;
+        bool saveCORR = false;
+        bool loadCORR = false;
+
+        private void btCORRpath_Click(object sender, EventArgs e)
+        {
+            if (saveCORR)
+            {
+                using (SaveFileDialog dialog = new SaveFileDialog())
+                {
+                    dialog.Title = "Please select the data file.";
+
+                    dialog.Filter = "CSV files (*.csv)|*.csv";
+
+                    dialog.DefaultExt = "csv";
+
+                    dialog.AddExtension = true;
+
+                    dialog.FileName = "E4980A_correction.csv";
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        textEditCORR.Text = dialog.FileName;
+                    }
+                }
+
+            }
+            else
+            {
+                using (OpenFileDialog dialog = new OpenFileDialog())
+                {
+                    dialog.Title = "Please select the data file.";
+
+                    dialog.Filter = "CSV files (*.csv)|*.csv";
+
+                    dialog.Multiselect = false;
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        textEditCORR.Text = dialog.FileName;
+                    }
+                }
+            }
+
+        }
+  
+        private bool CORRPathcheck()
+        {
+            string filePath = textEditCORR.Text.Trim();
+
+            // Validate the selected file.
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                XtraMessageBox.Show(
+                    "Please select a CORRection file.",
+                    "No File Selected",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
+                return false;
+            }
+
+            if (!File.Exists(filePath))
+            {
+                XtraMessageBox.Show(
+                    "The selected file could not be found.",
+                    "File Not Found",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            if (!string.Equals(Path.GetExtension(filePath), ".csv", StringComparison.OrdinalIgnoreCase))
+            {
+                XtraMessageBox.Show(
+                    "The selected file is not a CSV file.",
+                    "Invalid File",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private void checkCORRLCR()
+        {
+            session.FormattedIO.WriteLine("*OPC?");
+            string opc = session.FormattedIO.ReadLine().Trim();
+
+            if (opc != "1")
+            {
+                throw new Exception(
+                    "E4980A did not complete the correction operation."
+                );
+            }
+
+            // Check E4980A error queue
+            session.FormattedIO.WriteLine(":SYSTem:ERRor?");
+            string error = session.FormattedIO.ReadLine().Trim();
+            string errorCode = error.Split(',')[0].Trim();
+
+            if (errorCode != "0" && errorCode != "+0")
+            {
+                throw new Exception(
+                    "E4980A correction error:\n" + error
+                );
+            }
+        }
+        
+        // perform correction
+        private void simpleButtonCORR_Click(object sender, EventArgs e)
+        {
+            CORR = true;
+            if (lcrConnected)
+            {
+                CloseLCRSession();
+            }
+
+            session_visa();
+            lcrConnected = true;
+
+            string frequencyList = tbFlist.Text;
+
+            double[] frequencies = frequencyList.Split(new[] { ',', ';', '\r', '\n', '\t', ' ' },StringSplitOptions.RemoveEmptyEntries).
+                Select(x => double.Parse(x.Trim(),CultureInfo.InvariantCulture)).ToArray();
+
+            try
+            {
+                session.FormattedIO.WriteLine("*CLS");
+
+                if (toggleSwitchOpen.IsOn)
+                {
+                    XtraMessageBox.Show(
+                        "Open Correction: \n Make sure to check the Hardware.",
+                        "E4980A",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+
+                    for (int i = 0; i < frequencies.Length; i++)
+                    {
+                        int spot = i + 1;
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:FREQuency " +frequencies[i].ToString(CultureInfo.InvariantCulture));
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:STATe ON");
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:OPEN");
+
+                        session.FormattedIO.WriteLine("*OPC?");
+                        string opc = session.FormattedIO.ReadLine().Trim();
+
+                        if (opc != "1")
+                            throw new Exception(
+                                $"SHORT correction failed at SPOT {spot} " +
+                                $"({frequencies[i]} Hz).");
+                    }
+
+                    session.FormattedIO.WriteLine(":CORRection:OPEN:STATe ON");
+
+                    checkCORRLCR();
+
+                    ///session.FormattedIO.WriteLine(":CORRection:OPEN:EXEcute");
+                    /// checkCORRLCR();
+                    ///session.FormattedIO.WriteLine(":CORRection:OPEN:STATe ON");
+                    /// checkCORRLCR();
+                }
+
+                if (toggleSwitchShort.IsOn)
+                {
+                    XtraMessageBox.Show(
+                        "Short Correction: \n Make sure to check the Hardware.",
+                        "E4980A",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    for (int i = 0; i < frequencies.Length; i++)
+                    {
+                        int spot = i + 1;
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:FREQuency " + frequencies[i].ToString(CultureInfo.InvariantCulture));
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:STATe ON");
+
+                        session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:SHORT");
+
+                        session.FormattedIO.WriteLine("*OPC?");
+                        string opc = session.FormattedIO.ReadLine().Trim();
+
+                        if (opc != "1")
+                            throw new Exception(
+                                $"SHORT correction failed at SPOT {spot} " +
+                                $"({frequencies[i]} Hz).");
+                    }
+                
+
+                    session.FormattedIO.WriteLine(":CORRection:SHORT:STATe ON");
+
+                    checkCORRLCR();
+
+                }
+
+                XtraMessageBox.Show(
+                "Correction completed successfully.",
+                "E4980A",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+            }
+
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(
+                    $"Error during correction:\n{ex.Message}",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                CloseLCRSession();
+                CORR = false;
+            }
+        }
+
+        // save correction data
+        private void simpleButtonSAVECORR_Click(object sender, EventArgs e)
+        {
+            saveCORR = true;
+            CORR = true;
+
+            if (string.IsNullOrWhiteSpace(textEditCORR.Text))
+            {
+                btCORRpath_Click(this, new EventArgs());
+            }
+
+            if (lcrConnected)
+            {
+                CloseLCRSession();
+            }
+            session_visa();
+            lcrConnected = true;
+
+            try
+            {
+                // Request correction data
+                session.FormattedIO.WriteLine(":CORR:USE:DATA:SING?");
+                string corrData = session.FormattedIO.ReadLine().Trim();
+
+                // Save exactly what was returned by the E4980A
+                File.WriteAllText(textEditCORR.Text, corrData);
+
+                XtraMessageBox.Show(
+                    "Correction data saved successfully.",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(
+                    $"Error saving correction data:\n{ex.Message}",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            finally
+            {
+                CloseLCRSession();
+                saveCORR = false;
+                CORR = false;
+            }
+
+        }
+
+        // Load Correction file
+        private void simpleButtonLOADCORR_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textEditCORR.Text))
+            {
+                btCORRpath_Click(this, new EventArgs());
+            }
+
+            if (!CORRPathcheck())
+            {
+                return;
+            }
+
+            if (lcrConnected)
+            {
+                CloseLCRSession();
+            }
+
+            session_visa();
+            lcrConnected = true;
+
+            string frequencyList = tbFlist.Text;
+
+            double[] frequencies = frequencyList.Split(new[] { ',', ';', '\r', '\n', '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries).
+                Select(x => double.Parse(x.Trim(), CultureInfo.InvariantCulture)).ToArray();
+
+            string corrData = File.ReadAllText(textEditCORR.Text).Trim();
+
+            try
+            {
+                // Load correction data
+                session.FormattedIO.WriteLine("*CLS");
+
+                for (int i = 0; i < frequencies.Length; i++)
+                {
+                    int spot = i + 1;
+
+                    string freq =frequencies[i].ToString(CultureInfo.InvariantCulture);
+
+                    session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:FREQuency {freq}");
+
+                    session.FormattedIO.WriteLine($":CORRection:SPOT{spot}:STATe ON");
+                }
+
+                checkLOADCORRLCR();
+
+                session.FormattedIO.WriteLine(":CORRection:USE:DATA:SING " + corrData);
+
+                checkLOADCORRLCR();
+
+                // Enable correction data
+                session.FormattedIO.WriteLine(":CORRection:OPEN:STATe ON ");
+                session.FormattedIO.WriteLine(":CORRection:SHORT:STATe ON ");
+
+                checkLOADCORRLCR();
+
+                XtraMessageBox.Show(
+                    "Correction data uploaded successfully.",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(
+                    $"Error uploading correction data:\n{ex.Message}",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                CloseLCRSession();
+                CORR = false;
+            }
+        }
+
+        private void btClearSession_click(object sender, EventArgs e)
+        {
+            CloseLCRSession();
+
+            btClearSession.Enabled = false;
+            groupControlCORR.Enabled = toggleSwitchCORR.IsOn;
+            btnStart.Enabled = true;
+            btResetALL.Enabled = true;
+        }
+
+        private void btResetALL_Click(object sender, EventArgs e)
+        {
+            CORR = true;
+            if (lcrConnected)
+            {
+                CloseLCRSession();
+            }
+
+            session_visa();
+            lcrConnected = true;
+
+            try
+            {
+                session.FormattedIO.WriteLine(":SYST:PRES");
+            }
+
+            catch (Exception ex)
+            {
+                XtraMessageBox.Show(
+                    $"Error during CLEAR SET&CORR :\n{ex.Message}",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                CloseLCRSession();
+                
+                XtraMessageBox.Show(
+                    "CLEAR SET&CORR done successfully.",
+                    "E4980A",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                CORR = false;
+            }
+        }
+
+        private void toggleSwitchCORR_Toggled(object sender, EventArgs e)
+        {
+            groupControlCORR.Enabled = toggleSwitchCORR.IsOn;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿{
   "AppConfig": {
     "Port": "COM1",
-    "Setup": "LCR",
-    "Loop": "Enabled",
+    "Setup": "16452A",
+    "Loop": "Disabled",
     "LoopCount": 1,
     "Timer": "Disabled",
     "TimerCount": 60,
-    "path": "C:/Data/Measurements",
+    "path": "C:/Users/Everton/Desktop",
     "filename": "experiment001",
     "LCRid": "USB0::0x0957::0x0909::MY46204796::0::INSTR",
     "freqStart": 1000,
